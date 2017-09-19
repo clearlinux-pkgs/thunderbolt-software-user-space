@@ -1,1 +1,3 @@
-mv %{buildroot}/lib/* %{buildroot}/usr/lib/
+mkdir -p %{buildroot}/usr/lib
+mv %{buildroot}/lib/udev %{buildroot}/usr/lib/udev
+rmdir %{buildroot}/lib

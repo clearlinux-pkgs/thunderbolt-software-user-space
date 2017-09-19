@@ -4,13 +4,14 @@
 #
 Name     : thunderbolt-software-user-space
 Version  : 0.9.1
-Release  : 2
+Release  : 4
 URL      : https://github.com/01org/thunderbolt-software-user-space/archive/v0.9.1.tar.gz
 Source0  : https://github.com/01org/thunderbolt-software-user-space/archive/v0.9.1.tar.gz
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : BSD-3-Clause
 Requires: thunderbolt-software-user-space-bin
+Requires: thunderbolt-software-user-space-config
 Requires: thunderbolt-software-user-space-data
 BuildRequires : boost-dev
 BuildRequires : cmake
@@ -26,9 +27,18 @@ full license.
 Summary: bin components for the thunderbolt-software-user-space package.
 Group: Binaries
 Requires: thunderbolt-software-user-space-data
+Requires: thunderbolt-software-user-space-config
 
 %description bin
 bin components for the thunderbolt-software-user-space package.
+
+
+%package config
+Summary: config components for the thunderbolt-software-user-space package.
+Group: Default
+
+%description config
+config components for the thunderbolt-software-user-space package.
 
 
 %package data
@@ -48,7 +58,7 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1505830309
+export SOURCE_DATE_EPOCH=1505830851
 mkdir clr-build
 pushd clr-build
 cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib
@@ -56,24 +66,29 @@ make VERBOSE=1  %{?_smp_mflags}
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1505830309
+export SOURCE_DATE_EPOCH=1505830851
 rm -rf %{buildroot}
 pushd clr-build
 %make_install
 popd
 ## make_install_append content
-mv %{buildroot}/lib/* %{buildroot}/usr/lib/
+mkdir -p %{buildroot}/usr/lib
+mv %{buildroot}/lib/udev %{buildroot}/usr/lib/udev
+rmdir %{buildroot}/lib
 ## make_install_append end
 
 %files
 %defattr(-,root,root,-)
-/usr/lib/rules.d/60-tbtacl.rules
-/usr/lib/tbtacl
-/usr/lib/tbtacl-write
+/usr/lib/udev/tbtacl
+/usr/lib/udev/tbtacl-write
 
 %files bin
 %defattr(-,root,root,-)
 /usr/bin/tbtadm
+
+%files config
+%defattr(-,root,root,-)
+/usr/lib/udev/rules.d/60-tbtacl.rules
 
 %files data
 %defattr(-,root,root,-)

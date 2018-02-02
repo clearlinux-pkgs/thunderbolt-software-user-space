@@ -4,7 +4,7 @@
 #
 Name     : thunderbolt-software-user-space
 Version  : 0.9.2
-Release  : 5
+Release  : 6
 URL      : https://github.com/01org/thunderbolt-software-user-space/archive/v0.9.2.tar.gz
 Source0  : https://github.com/01org/thunderbolt-software-user-space/archive/v0.9.2.tar.gz
 Summary  : No detailed summary available

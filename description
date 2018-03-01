@@ -1,0 +1,3 @@
+Provides user-space components that implement device approval support:
+1. Easier interaction with the kernel module for approving connected devices.
+2. ACL for auto-approving devices white-listed by the user.

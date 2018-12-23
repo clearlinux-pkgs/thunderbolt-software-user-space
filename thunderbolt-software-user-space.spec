@@ -4,18 +4,18 @@
 #
 Name     : thunderbolt-software-user-space
 Version  : 0.9.3
-Release  : 12
-URL      : https://github.com/01org/thunderbolt-software-user-space/archive/v0.9.3.tar.gz
-Source0  : https://github.com/01org/thunderbolt-software-user-space/archive/v0.9.3.tar.gz
+Release  : 13
+URL      : https://github.com/intel/thunderbolt-software-user-space/archive/v0.9.3.tar.gz
+Source0  : https://github.com/intel/thunderbolt-software-user-space/archive/v0.9.3.tar.gz
 Summary  : No detailed summary available
 Group    : Development/Tools
 License  : BSD-3-Clause
-Requires: thunderbolt-software-user-space-bin
-Requires: thunderbolt-software-user-space-config
-Requires: thunderbolt-software-user-space-data
-Requires: thunderbolt-software-user-space-doc
+Requires: thunderbolt-software-user-space-bin = %{version}-%{release}
+Requires: thunderbolt-software-user-space-config = %{version}-%{release}
+Requires: thunderbolt-software-user-space-data = %{version}-%{release}
+Requires: thunderbolt-software-user-space-license = %{version}-%{release}
 BuildRequires : boost-dev
-BuildRequires : cmake
+BuildRequires : buildreq-cmake
 BuildRequires : pkgconfig(udev)
 Patch1: build.patch
 
@@ -27,8 +27,9 @@ Provides user-space components that implement device approval support:
 %package bin
 Summary: bin components for the thunderbolt-software-user-space package.
 Group: Binaries
-Requires: thunderbolt-software-user-space-data
-Requires: thunderbolt-software-user-space-config
+Requires: thunderbolt-software-user-space-data = %{version}-%{release}
+Requires: thunderbolt-software-user-space-config = %{version}-%{release}
+Requires: thunderbolt-software-user-space-license = %{version}-%{release}
 
 %description bin
 bin components for the thunderbolt-software-user-space package.
@@ -58,6 +59,14 @@ Group: Documentation
 doc components for the thunderbolt-software-user-space package.
 
 
+%package license
+Summary: license components for the thunderbolt-software-user-space package.
+Group: Default
+
+%description license
+license components for the thunderbolt-software-user-space package.
+
+
 %prep
 %setup -q -n thunderbolt-software-user-space-0.9.3
 %patch1 -p1
@@ -67,16 +76,18 @@ export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
 export LANG=C
-export SOURCE_DATE_EPOCH=1519865185
-mkdir clr-build
+export SOURCE_DATE_EPOCH=1545592362
+mkdir -p clr-build
 pushd clr-build
-cmake .. -G "Unix Makefiles" -DCMAKE_INSTALL_PREFIX=/usr -DBUILD_SHARED_LIBS:BOOL=ON -DLIB_INSTALL_DIR:PATH=/usr/lib64 -DCMAKE_AR=/usr/bin/gcc-ar -DLIB_SUFFIX=64 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_RANLIB=/usr/bin/gcc-ranlib
-make  %{?_smp_mflags}
+%cmake ..
+make  %{?_smp_mflags} VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1519865185
+export SOURCE_DATE_EPOCH=1545592362
 rm -rf %{buildroot}
+mkdir -p %{buildroot}/usr/share/package-licenses/thunderbolt-software-user-space
+cp COPYING %{buildroot}/usr/share/package-licenses/thunderbolt-software-user-space/COPYING
 pushd clr-build
 %make_install
 popd
@@ -101,5 +112,9 @@ popd
 /usr/share/bash-completion/completions/tbtadm
 
 %files doc
-%defattr(-,root,root,-)
+%defattr(0644,root,root,0755)
 /usr/share/doc/thunderbolt-user-space/copyright
+
+%files license
+%defattr(0644,root,root,0755)
+/usr/share/package-licenses/thunderbolt-software-user-space/COPYING

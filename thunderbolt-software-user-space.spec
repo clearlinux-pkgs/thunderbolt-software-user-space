@@ -4,7 +4,7 @@
 #
 Name     : thunderbolt-software-user-space
 Version  : 0.9.3
-Release  : 15
+Release  : 16
 URL      : https://github.com/intel/thunderbolt-software-user-space/archive/v0.9.3.tar.gz
 Source0  : https://github.com/intel/thunderbolt-software-user-space/archive/v0.9.3.tar.gz
 Summary  : No detailed summary available

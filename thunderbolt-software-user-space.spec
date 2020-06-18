@@ -4,7 +4,7 @@
 #
 Name     : thunderbolt-software-user-space
 Version  : 0.9.3
-Release  : 16
+Release  : 17
 URL      : https://github.com/intel/thunderbolt-software-user-space/archive/v0.9.3.tar.gz
 Source0  : https://github.com/intel/thunderbolt-software-user-space/archive/v0.9.3.tar.gz
 Summary  : No detailed summary available
@@ -69,25 +69,34 @@ license components for the thunderbolt-software-user-space package.
 
 %prep
 %setup -q -n thunderbolt-software-user-space-0.9.3
+cd %{_builddir}/thunderbolt-software-user-space-0.9.3
 %patch1 -p1
 
 %build
 export http_proxy=http://127.0.0.1:9/
 export https_proxy=http://127.0.0.1:9/
 export no_proxy=localhost,127.0.0.1,0.0.0.0
-export LANG=C
-export SOURCE_DATE_EPOCH=1545592362
+export LANG=C.UTF-8
+export SOURCE_DATE_EPOCH=1592461016
 mkdir -p clr-build
 pushd clr-build
+export GCC_IGNORE_WERROR=1
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+export CFLAGS="$CFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FCFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export FFLAGS="$FFLAGS -O3 -ffat-lto-objects -flto=4 "
+export CXXFLAGS="$CXXFLAGS -O3 -ffat-lto-objects -flto=4 "
 %cmake ..
-make  %{?_smp_mflags} VERBOSE=1
+make  %{?_smp_mflags}  VERBOSE=1
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1545592362
+export SOURCE_DATE_EPOCH=1592461016
 rm -rf %{buildroot}
 mkdir -p %{buildroot}/usr/share/package-licenses/thunderbolt-software-user-space
-cp COPYING %{buildroot}/usr/share/package-licenses/thunderbolt-software-user-space/COPYING
+cp %{_builddir}/thunderbolt-software-user-space-0.9.3/COPYING %{buildroot}/usr/share/package-licenses/thunderbolt-software-user-space/6074797f283d9455c49524bf67c2a9f77efa029f
 pushd clr-build
 %make_install
 popd
@@ -117,4 +126,4 @@ popd
 
 %files license
 %defattr(0644,root,root,0755)
-/usr/share/package-licenses/thunderbolt-software-user-space/COPYING
+/usr/share/package-licenses/thunderbolt-software-user-space/6074797f283d9455c49524bf67c2a9f77efa029f
